@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <list>
 #include <iterator>
-#include "libSCG.h"
+#include "libs/libSCG.h"
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
@@ -44,7 +44,7 @@ void updateDir(list<string> & currentDir, string path, int & chooseDir, libSCG &
 	currentDir.push_front("..");
 	scg.execute("clear");
 	int counter = 0;
-	cout << path;
+	cout << path << endl;
 	for (auto& entry : filesystem::directory_iterator(path))
 	{
 		currentDir.push_back(string(entry.path()));
