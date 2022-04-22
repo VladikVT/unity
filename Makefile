@@ -1,2 +1,2 @@
 MAIN:
-	g++ -o main main.cpp libs/libSCG.cpp
+	g++ -o unity main.cpp libs/libSCG.cpp
