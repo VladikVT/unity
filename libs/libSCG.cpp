@@ -146,6 +146,14 @@ void libSCG::execute(string command)
 		clearScreen;
 		drawWindow();
 	}
+	// TEXT //
+	else if (cmdAttributes[0] == "text")
+	{
+		text(cmdAttributes[1],
+				stoi(cmdAttributes[2]),
+				stoi(cmdAttributes[3]),
+				stoi(cmdAttributes[4]));
+	}
 }
 
 // PRIVATE //
@@ -183,7 +191,7 @@ void libSCG::drawWindow()
 
 void libSCG::printLogMsg(string msg, int err)
 {
-	if (debug == true || err == 3)
+	if (debug == true || err == 2)
 	{
 		cout << "SCG[" << err << "] >>> " << msg << endl;
 		saveCursor;
@@ -251,7 +259,7 @@ void libSCG::setColor(int Br, int Bg, int Bb, int Fr, int Fg, int Fb)
 	printLogMsg("Color set", 0);
 }
 
-void libSCG::circle(string symbol, int x, int y, int radius, bool fill)
+void libSCG::circle(string symbol, bool fill, int radius, int x, int y)
 {
 	if (x - radius < 0 || y - radius < 0 || x + radius >= sizeX || y + radius >= sizeY)
 	{
@@ -335,4 +343,15 @@ void libSCG::line(string symbol, int x1, int y1, int x2, int y2)
 			}
 		}
 	}
+}
+
+void libSCG::text(string text, int length, int x, int y)
+{
+	if (text.length() > length)
+	{
+		text.resize(length);
+		text[length - 1] = '.';
+		text[length - 2] = '.';
+	}
+	writeSymbol(text, x, y);
 }

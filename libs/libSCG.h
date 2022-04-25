@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
@@ -34,8 +35,9 @@ class libSCG
 		void writeSymbol(string symbol, int x, int y);
 		void rectangle(string symbol, bool fill, int x1, int y1, int x2, int y2);
 		void setColor(int Br, int Bg, int Bb, int Fr, int Fg, int Fb);	
-		void circle(string symbol, int x, int y, int radius, bool fill);
+		void circle(string symbol, bool fill, int radius, int x, int y);
 		void line(string symbol, int x1, int y1, int x2, int y2);
+		void text(string text, int length, int x, int y);
 };
 
 #endif // LIBSCG_H
