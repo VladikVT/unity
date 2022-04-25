@@ -16,9 +16,14 @@ Experience
 4. Run unity
   > ./unity
 
+### Using:
+- Scrolling: 'h' - down, 'k' - up
+- Enter in directory: enter
+- Quit: 'q'
+
 ### Todo:
 - [x] Moving in dirs
-- [ ] Scrolling folder content
+- [x] Scrolling folder content
 - [ ] View files in selected folder
 - [ ] View file content
 - [ ] View images
