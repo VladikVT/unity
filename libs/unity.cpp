@@ -1,11 +1,11 @@
 #include "unity.h"
 
-void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeY)
+void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 {
 	int counter = 0;
 	// Clear first column if you scroll column to up or down 
 	if (sizeY - cursorRow <= 0) 
-		scg->execute("rect;  ;true;0;0;11;" + to_string(sizeY));
+		scg->execute("rect;  ;true;0;0;" + to_string(sizeX / 5) + ";" + to_string(sizeY));
 	for (string i : *contentDir)
 	{
 		string file = i;
@@ -14,9 +14,9 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeY)
 		if (cursorRow == counter) { scg->execute("bgcolor;0;128;192"); }
 		if (sizeY - cursorRow > 0)
 		{
-			scg->execute("text;" + file + ";20;0;" + to_string(counter));
+			scg->execute("text;" + file + ";" + to_string(sizeX / 2 - 4) + ";0;" + to_string(counter));
 		} else {
-			scg->execute("text;" + file + ";20;0;" + to_string(counter + (sizeY - cursorRow)));
+			scg->execute("text;" + file + ";" + to_string(sizeX / 2 - 4) + ";0;" + to_string(counter + (sizeY - cursorRow)));
 		}
 		if (is_directory(i)) { scg->execute("fgcolor;255;255;255"); }
 		if (cursorRow == counter) {scg->execute("bgcolor;0;0;0"); }
@@ -25,11 +25,11 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeY)
 	}
 }
 
-void updateDir(list<string> *contentDir, libSCG *scg, string path, int sizeY)
+void updateDir(list<string> *contentDir, libSCG *scg, string path, int sizeX, int sizeY)
 {
 	contentDir->clear();
 	// Clear first column
-	scg->execute("rect;  ;true;0;0;11;" + to_string(sizeY));
+	scg->execute("rect;  ;true;0;0;" + to_string(sizeX / 5) + ";" + to_string(sizeY));
 	// Add path to top dir
 	contentDir->push_front("/..");
 	// Add paths to internal dirs
