@@ -1,108 +1,91 @@
+/*
+ * ToDo list:
+ * [x] Moving cursor rows
+ * [x] Scrolling rows
+ * [x] Moving on dirs 
+ */
+
 #include <iostream>
 #include <filesystem>
 #include <list>
 #include <iterator>
-#include "libs/libSCG.h"
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
 
+#include "libs/libSCG.h"
+#include "libs/unity.h"
+
 using namespace std;
-
-int getch() {
-	struct termios oldt,
-	newt;
-	int ch;
-	tcgetattr( STDIN_FILENO, &oldt );
-	newt = oldt;
-	newt.c_lflag &= ~( ICANON | ECHO );
-	tcsetattr( STDIN_FILENO, TCSANOW, &newt );
-	ch = getchar();
-	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
-	return ch;
-}
-
-void moveCur(int & chooseDir, int upORdown, libSCG & scg, list<string> & currentDir)
-{
-	scg.execute("dot;" + *next(currentDir.begin(), chooseDir) + ";0;" + to_string(chooseDir));
-	if (chooseDir + upORdown < 0) {
-		chooseDir = 0;
-	} else if (chooseDir + upORdown > currentDir.size() - 1) {
-		chooseDir = currentDir.size() - 1;
-		cout << currentDir.size();
-	} else {
-		chooseDir += upORdown;
-	}
-	scg.execute("bgcolor;0;64;255");
-	scg.execute("dot;" + *next(currentDir.begin(), chooseDir) + ";0;" + to_string(chooseDir));
-	scg.execute("bgcolor;0;0;0");
-}
-
-void updateDir(list<string> & currentDir, string path, int & chooseDir, libSCG & scg, int sizeX, int sizeY)
-{
-	currentDir.erase(currentDir.begin(), currentDir.end());
-	currentDir.push_front("..");
-	scg.execute("clear");
-	int counter = 0;
-	cout << path << endl;
-	for (auto& entry : filesystem::directory_iterator(path))
-	{
-		currentDir.push_back(string(entry.path()));
-		scg.execute("dot;..;0;0");
-
-		if (counter < sizeY - 1) scg.execute("dot;" + string(entry.path()) + ";0;" + to_string(counter + 1));
-		counter++;
-	}
-	chooseDir = 0;
-	scg.execute("bgcolor;0;64;255");
-	scg.execute("dot;" + *next(currentDir.begin(), chooseDir) + ";0;0");
-	scg.execute("bgcolor;0;0;0");
-}
-
-void selectDir(list<string> & currentDir, string & path, int & chooseDir)
-{
-	path = *next(currentDir.begin(), chooseDir);
-}
+using namespace std::filesystem;
 
 int main()
 {
 	int sizeX = 83;
 	int sizeY = 32;
 	libSCG scg(sizeX, sizeY, false, true);
+	scg.execute("bgcolor;0;0;0");
+	scg.execute("rect;  ;true;0;0;" + to_string(sizeX--) + ";" + to_string(sizeY--));
+	scg.execute("line;||;12;0;12;" + to_string(sizeY));
 
-	int chooseDir = 0;
+	list <string> contentDir;
+	string currentPath = string(current_path());
 
-	list <string> currentDir;
-
-	string path = "/";
-	cin >> path;
+	int cursorCol = 0;
+	int cursorRow = 0;
 	
-	updateDir(currentDir, path, chooseDir, scg, sizeX, sizeY);
-
-	getch();
+	updateDir(&contentDir, &scg,currentPath, sizeY);
+	print1Col(&contentDir, &scg, cursorRow, sizeY);
 	
-	while(true)
+	bool quit = false;
+
+	while (!quit)
 	{
-		int upORdown = getch();
-		if (upORdown == 113 || upORdown == 106 || upORdown == 107 || upORdown == 10)
+		int action = getch();
+		switch (action)
 		{
-			upORdown = upORdown == 107 ? -1 : upORdown;
-			upORdown = upORdown == 106 ? 1 : upORdown;
-			if (upORdown == 1 || upORdown == -1) {
-				moveCur(chooseDir, upORdown, scg, currentDir);
-			} else if (upORdown == 10) {
-				if (*next(currentDir.begin(), chooseDir) == "..") {
-					path.erase(path.find_last_of("/"), path.length());
-				} else {
-					path = *next(currentDir.begin(), chooseDir);
+			case 106: // Cursor up
+				if (cursorRow < contentDir.size() - 1)
+				{
+					moveCursorRow(&cursorRow, 1);
+					print1Col(&contentDir, &scg, cursorRow, sizeY);
 				}
-				updateDir(currentDir, path, chooseDir, scg, sizeX, sizeY);
-				cout << path << endl;
-			} else if (upORdown == 113) {
 				break;
-			}
-
+			case 107: // Cursor down
+				if (cursorRow > 0)
+				{
+					moveCursorRow(&cursorRow, -1);
+					print1Col(&contentDir, &scg, cursorRow, sizeY);
+				}
+				break;
+			case 10: // Enter in dir
+				if (is_directory(*next(contentDir.begin(), cursorRow)))
+				{
+					// Entering to top dir
+					if (*next(contentDir.begin(), cursorRow) == "/..")
+					{
+						// Clear all after last '/'
+						// Exapmle: "home/arch/folder" --> "home/arch"
+						currentPath.erase(currentPath.find_last_of("/"), currentPath.length() + 1);
+						// If you in root dir
+						if (currentPath == "") currentPath = "/";
+					// Entering in internal dir
+					} else {
+						currentPath = *next(contentDir.begin(), cursorRow);
+					}
+					cursorRow = 0;
+					updateDir(&contentDir, &scg, currentPath, sizeY);
+					print1Col(&contentDir, &scg, cursorRow, sizeY);
+				}
+				break;
+			case 113: // Quit
+				quit = true;
+				break;
+			default:
+				break;
 		}
 	}
+
 	return 0;
 }
+
