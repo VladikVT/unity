@@ -28,3 +28,4 @@ Experience
 - [ ] View file content
 - [ ] View images
 - [ ] Hide hiden folders
+- [ ] Make custom themes
