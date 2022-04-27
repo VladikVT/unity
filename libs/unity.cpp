@@ -46,10 +46,17 @@ void print2Col(string path, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 		{
 			if (counter > sizeY) break;
 			string file = string(entry.path());
+			string fileCopy = file;
 			file.erase(0, file.find_last_of("/"));
-			scg->execute("text;" + file + ";" + to_string((int)(sizeX * 0.35) - 3) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter));
+			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;0"); }
+			scg->execute("text;" + file + ";" + to_string((int)(sizeX * 0.35)) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter));	
+			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;255"); }
 			counter++;
 		}
+	} else {
+		scg->execute("bgcolor;255;0;0");
+		scg->execute("text;[ACCESS DENIED];" + to_string((int)(sizeX * 0.35)) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";0");
+		scg->execute("bgcolor;0;0;0");
 	}
 }
 
