@@ -193,7 +193,7 @@ void libSCG::printLogMsg(string msg, int err)
 {
 	if (debug == true || err == 2)
 	{
-		cout << "SCG[" << err << "] >>> " << msg << endl;
+		cout << "SCG[" + to_string(err) + "] >>> " + msg + "\n";
 		saveCursor;
 	}
 }
@@ -202,12 +202,11 @@ void libSCG::writeSymbol(string symbol, int x, int y)
 {
 	if (0 <= x && x < sizeX && 0 <= y && y < sizeY)
 	{
-		if (btflWindow == true) { cout << "\033[" << y + 2 << ";" << x * 2 + 3 << "H"; }
-		else { cout << "\033[" << y  + 1 << ";" << x * 2 + 1 << "H"; }
-		cout << "\033[38;2;" << FGcolor[0] << ";" << FGcolor[1] << ";" << FGcolor[2] << "m";
-		cout << "\033[48;2;" << BGcolor[0] << ";" << BGcolor[1] << ";" << BGcolor[2] << "m";
-		cout << symbol;
-		cout << "\033[0;0m";
+		if (btflWindow == true) { cout << "\033[" + to_string(y + 2) + ";" + to_string(x * 2 + 3) + "H"; }
+		else { cout << "\033[" + to_string(y + 1) + ";" + to_string(x * 2 + 1) + "H"; }
+		cout << "\033[38;2;" + to_string(FGcolor[0]) + ";" + to_string(FGcolor[1]) + ";" + to_string(FGcolor[2]) + "m"
+			+ "\033[48;2;" + to_string(BGcolor[0]) + ";" + to_string(BGcolor[1]) + ";" + to_string(BGcolor[2]) + "m"
+			+ symbol + "\033[0;0m";
 		loadCursor;
 	}
 }
