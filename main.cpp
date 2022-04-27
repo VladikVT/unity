@@ -3,7 +3,7 @@
  * [x] Make adaptive window
  * [x] View files in select dir
  * [x] Remove bugs with adaptive window
- * [ ] Remove bug with view file in top dir 
+ * [x] Remove bug with view file in top dir 
  */
 
 #include <iostream>
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 		int action = getch();
 		switch (action)
 		{
-			case 106: // Cursor up
+			case 106: // Cursor down
 				if (cursorRow < contentDir.size() - 1)
 				{
 					moveCursorRow(&cursorRow, 1);
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 					}
 				}
 				break;
-			case 107: // Cursor down
+			case 107: // Cursor up
 				if (cursorRow > 0)
 				{
 					moveCursorRow(&cursorRow, -1);
@@ -79,8 +79,10 @@ int main(int argc, char **argv)
 						string path = *next(contentDir.begin(), cursorRow);
 						if (path == "/..")
 						{
-							path.erase(path.find_last_of("/"), path.length() + 1);
+							path = currentPath;
+							path = path.erase(path.find_last_of("/"), path.length() + 1);
 							if (path == "") path = "/";
+
 						}
 						print2Col(path, &scg, cursorRow, sizeX, sizeY);
 					}
