@@ -24,7 +24,8 @@ Experience
 ### Todo:
 - [x] Moving in dirs
 - [x] Scrolling folder content
-- [ ] View files in selected folder
+- [x] View files in selected folder
 - [ ] View file content
 - [ ] View images
 - [ ] Hide hiden folders
+- [ ] Make custom themes
