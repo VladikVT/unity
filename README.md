@@ -17,7 +17,7 @@ Experience
   > ./unity
 
 ### Using:
-- Scrolling: 'h' - down, 'k' - up
+- Scrolling: 'j' - down, 'k' - up
 - Enter in directory: enter
 - Quit: 'q'
 
