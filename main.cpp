@@ -1,9 +1,6 @@
 /*
  * ToDo list:
- * [x] Make adaptive window
- * [x] View files in select dir
- * [x] Remove bugs with adaptive window
- * [x] Remove bug with view file in top dir 
+ * [x] View file content
  */
 
 #include <iostream>
@@ -30,13 +27,14 @@ int main(int argc, char **argv)
 	sizeY = sizeY - 3;
 	libSCG scg(sizeX, sizeY, false, true);
 	scg.execute("bgcolor;0;0;0");
-	scg.execute("rect;  ;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY - 1));
-	scg.execute("line;| ;" + to_string((int)(sizeX * 0.15) + 2) + ";0;" + to_string((int)(sizeX * 0.15) + 2) + ";" + to_string(sizeY));
-	scg.execute("line;| ;" + to_string(sizeX / 3 + 2) + ";0;" + to_string(sizeX / 3 + 2) + ";" + to_string(sizeY));
+	scg.execute("rect;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY - 1), "  ");
+	scg.execute("line;" + to_string((int)(sizeX * 0.15) + 2) + ";0;" + to_string((int)(sizeX * 0.15) + 2) + ";" + to_string(sizeY), "| ");
+	scg.execute("line;" + to_string(sizeX / 3 + 2) + ";0;" + to_string(sizeX / 3 + 2) + ";" + to_string(sizeY), "| ");
 	list <string> contentDir;
 	string currentPath = string(current_path()) + "/";
 
 	int cursorRow = 0;
+	bool col3flag = false;
 	
 	updateDir(&contentDir, &scg, currentPath, sizeX, sizeY);
 	print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
@@ -53,8 +51,14 @@ int main(int argc, char **argv)
 				{
 					moveCursorRow(&cursorRow, 1);
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
+					// Clear 1 and 2 column
+					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
+					if (col3flag)
+					{
+						scg.execute("rect;true;" + to_string(sizeX * 0.35 + 1) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+						col3flag = false;
+					}
 					// Print internal folder
-					scg.execute("rect;  ;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1));
 					if (is_directory(*next(contentDir.begin(), cursorRow)))
 					{
 						string path = *next(contentDir.begin(), cursorRow);
@@ -72,10 +76,17 @@ int main(int argc, char **argv)
 				{
 					moveCursorRow(&cursorRow, -1);
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
+					// Clear 2 and 3 column
+					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
+					if (col3flag)
+					{
+						scg.execute("rect;true;" + to_string((int)(sizeX * 0.35 + 1)) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+						col3flag = false;
+					}
 					// Print internal folder
-					scg.execute("rect;  ;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1));
 					if (is_directory(*next(contentDir.begin(), cursorRow)))
 					{
+						scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
 						string path = *next(contentDir.begin(), cursorRow);
 						if (path == "/..")
 						{
@@ -91,7 +102,6 @@ int main(int argc, char **argv)
 			case 10: // Enter in dir
 				if (is_directory(*next(contentDir.begin(), cursorRow)))
 				{
-					scg.execute("rect;  ;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1));
 					// Entering to top dir
 					if (*next(contentDir.begin(), cursorRow) == "/..")
 					{
@@ -107,6 +117,10 @@ int main(int argc, char **argv)
 					cursorRow = 0;
 					updateDir(&contentDir, &scg, currentPath, sizeX, sizeY);
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
+				} else {
+					col3flag = true;
+					string path = *next(contentDir.begin(), cursorRow);
+					printFileContent(&scg, path, sizeX, sizeY);
 				}
 				break;
 			case 113: // Quit

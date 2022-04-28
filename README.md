@@ -25,7 +25,7 @@ Experience
 - [x] Moving in dirs
 - [x] Scrolling folder content
 - [x] View files in selected folder
-- [ ] View file content
+- [x] View file content
 - [ ] View images
 - [ ] Hide hiden folders
 - [ ] Make custom themes

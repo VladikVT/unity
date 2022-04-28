@@ -1,5 +1,27 @@
 #include "unity.h"
 
+void printFileContent(libSCG *scg, string path, int sizeX, int sizeY)
+{
+	string line;
+	ifstream file(path);
+	int counter = 0;
+	
+	if (!file.is_open())
+	{
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), "[CAN`T OPEN FILE]");
+		return ;
+	} else if (!access(path.c_str(), X_OK)) {
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), "[EXECUTABLE FILE]");
+		return ;
+	}
+
+	while (getline(file, line) && counter < sizeY)
+	{
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), line);
+		counter++;
+	}
+}
+
 void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 {
 	int counter = 0;
@@ -10,7 +32,8 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, 
 		lastDir = contentDir->size();
 	if (sizeY - cursorRow <= 1)
 	{
-		scg->execute("rect;  ;true;0;0;" + to_string((int)(sizeX * 0.15) + 1) + ";" + to_string(sizeY));
+		// Clear first column
+		scg->execute("rect;true;0;0;" + to_string((int)(sizeX * 0.15 + 1)) + ";" + to_string(sizeY), "  ");
 		if (sizeY - cursorRow <= 0)
 		{
 			fstDir = cursorRow - sizeY;	
@@ -26,9 +49,9 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, 
 		if (cursorRow - fstDir == counter) { scg->execute("bgcolor;0;128;192"); }
 		if (sizeY - cursorRow > 0)
 		{
-			scg->execute("text;" + file + ";" + to_string((int)(sizeX * 0.35)) + ";0;" + to_string(counter));
+			scg->execute("text;" + to_string((int)(sizeX * 0.35) - 1) + ";0;" + to_string(counter), file);
 		} else {
-			scg->execute("text;" + file + ";" + to_string((int)(sizeX * 0.35)) + ";0;" + to_string(counter - 1));
+			scg->execute("text;" + to_string((int)(sizeX * 0.35) - 1) + ";0;" + to_string(counter - 1), file);
 		}
 		if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;255"); }
 		if (cursorRow - fstDir == counter) {scg->execute("bgcolor;0;0;0"); }
@@ -49,13 +72,13 @@ void print2Col(string path, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 			string fileCopy = file;
 			file.erase(0, file.find_last_of("/"));
 			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;0"); }
-			scg->execute("text;" + file + ";" + to_string((int)(sizeX * 0.35)) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter));	
+			scg->execute("text;" + to_string((int)(sizeX * 0.35) - 1) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter), file);	
 			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;255"); }
 			counter++;
 		}
 	} else {
 		scg->execute("bgcolor;255;0;0");
-		scg->execute("text;[ACCESS DENIED];" + to_string((int)(sizeX * 0.35)) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";0");
+		scg->execute("text;" + to_string((int)(sizeX * 0.35)) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";0", "[ACCESS DENIED]");
 		scg->execute("bgcolor;0;0;0");
 	}
 }
@@ -65,8 +88,9 @@ void updateDir(list<string> *contentDir, libSCG *scg, string path, int sizeX, in
 	if (access(path.c_str(), R_OK) == 0)
 	{
 		contentDir->clear();
-		// Clear first column
-		scg->execute("rect;  ;true;0;0;" + to_string((int)(sizeX * 0.15 + 1)) + ";" + to_string(sizeY));
+		// Clear 1 and 2 column
+		scg->execute("rect;true;0;0;" + to_string((int)(sizeX * 0.15 + 1)) + ";" + to_string(sizeY), "  ");
+		scg->execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
 		// Add path to top dir
 		contentDir->push_front("/..");
 		// Add paths to internal dirs
