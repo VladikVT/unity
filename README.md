@@ -18,7 +18,7 @@ Experience
 
 ### Using:
 - Scrolling: 'j' - down, 'k' - up
-- Enter in directory: enter
+- Enter in directory or show file content: enter
 - Quit: 'q'
 
 ### Todo:
