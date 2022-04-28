@@ -27,7 +27,7 @@ Experience
 - [x] View files in selected folder
 - [x] View file content
 - [ ] View images
-- [ ] Hide hiden folders
+- [x] Hide hiden files
 - [ ] Make custom themes
 - [ ] Show file metadata
 - [ ] Create and delete files
