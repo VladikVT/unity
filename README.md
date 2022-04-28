@@ -29,3 +29,5 @@ Experience
 - [ ] View images
 - [ ] Hide hiden folders
 - [ ] Make custom themes
+- [ ] Show file metadata
+- [ ] Create and delete files
