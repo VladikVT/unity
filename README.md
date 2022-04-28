@@ -12,9 +12,9 @@ Experience
 2. Enter in unity folder 
   > cd unity
 3. Compile project 
-  > make
+  > make && sudo make install clean
 4. Run unity
-  > ./unity
+  > unity
 
 ### Using:
 - Scrolling: 'j' - down, 'k' - up
