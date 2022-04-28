@@ -35,8 +35,9 @@ int main(int argc, char **argv)
 
 	int cursorRow = 0;
 	bool col3flag = false;
-	
-	updateDir(&contentDir, &scg, currentPath, sizeX, sizeY);
+	bool hidenFiles = false;
+
+	updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
 	print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 	
 	bool quit = false;
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 							path.erase(path.find_last_of("/"), path.length() + 1);
 							if (path == "") path = "/";
 						}
-						print2Col(path, &scg, cursorRow, sizeX, sizeY);
+						print2Col(path, &scg, hidenFiles, cursorRow, sizeX, sizeY);
 					}
 				}
 				break;
@@ -75,6 +76,7 @@ int main(int argc, char **argv)
 				if (cursorRow > 0)
 				{
 					moveCursorRow(&cursorRow, -1);
+
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 					// Clear 2 and 3 column
 					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
@@ -95,8 +97,18 @@ int main(int argc, char **argv)
 							if (path == "") path = "/";
 
 						}
-						print2Col(path, &scg, cursorRow, sizeX, sizeY);
+						print2Col(path, &scg, hidenFiles, cursorRow, sizeX, sizeY);
 					}
+				}
+				break;
+			case 115:
+				hidenFiles = !hidenFiles;
+				updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
+				print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
+				if (col3flag)
+				{
+					scg.execute("rect;true;" + to_string(sizeX * 0.35 + 1) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+					col3flag = false;
 				}
 				break;
 			case 10: // Enter in dir
@@ -115,7 +127,7 @@ int main(int argc, char **argv)
 						currentPath = *next(contentDir.begin(), cursorRow);
 					}
 					cursorRow = 0;
-					updateDir(&contentDir, &scg, currentPath, sizeX, sizeY);
+					updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 				} else {
 					col3flag = true;

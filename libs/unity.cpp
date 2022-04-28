@@ -44,7 +44,7 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, 
 	{
 		string fileCopy = *i;
 		string file = *i;
-		file.erase(0, fileCopy.find_last_of("/"));
+		file.erase(0, fileCopy.find_last_of("/"));	
 		if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;0"); }
 		if (cursorRow - fstDir == counter) { scg->execute("bgcolor;0;128;192"); }
 		if (sizeY - cursorRow > 0)
@@ -60,7 +60,7 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, 
 	}
 }
 
-void print2Col(string path, libSCG *scg, int cursorRow, int sizeX, int sizeY)
+void print2Col(string path, libSCG *scg, bool hidenFiles, int cursorRow, int sizeX, int sizeY)
 {
 	int counter = 0;
 	if (access(path.c_str(), R_OK) == 0)
@@ -71,6 +71,11 @@ void print2Col(string path, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 			string file = string(entry.path());
 			string fileCopy = file;
 			file.erase(0, file.find_last_of("/"));
+			if (file.find_first_of(".") == 1 && !hidenFiles)
+			{
+				continue;
+			}
+			if (file.find_first_of(".") == 0 && !hidenFiles) continue;
 			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;0"); }
 			scg->execute("text;" + to_string((int)(sizeX * 0.35) - 1) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter), file);	
 			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;255"); }
@@ -83,7 +88,7 @@ void print2Col(string path, libSCG *scg, int cursorRow, int sizeX, int sizeY)
 	}
 }
 
-void updateDir(list<string> *contentDir, libSCG *scg, string path, int sizeX, int sizeY)
+void updateDir(list<string> *contentDir, libSCG *scg, string path, bool hidenFiles, int sizeX, int sizeY)
 {
 	if (access(path.c_str(), R_OK) == 0)
 	{
@@ -96,6 +101,12 @@ void updateDir(list<string> *contentDir, libSCG *scg, string path, int sizeX, in
 		// Add paths to internal dirs
 		for (auto& entry : filesystem::directory_iterator(path))
 		{
+			string file = entry.path();
+			file.erase(0, file.find_last_of("/"));	
+			if (file.find_first_of(".") == 1 && !hidenFiles)
+			{
+				continue;
+			}
 			contentDir->push_back(string(entry.path()));
 		}
 	}
