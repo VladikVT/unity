@@ -104,6 +104,10 @@ int main(int argc, char **argv)
 			case 115:
 				hidenFiles = !hidenFiles;
 				updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
+				if (cursorRow >= contentDir.size())
+				{
+					cursorRow = contentDir.size() - 1;
+				}
 				print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 				if (col3flag)
 				{
