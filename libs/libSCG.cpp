@@ -31,7 +31,7 @@ libSCG::~libSCG()
 
 // PUBLIC //
 
-void libSCG::execute(string command)
+void libSCG::execute(string command, string symbol)
 {
 	string dlmtr = ";";
 	size_t pos = 0;
@@ -60,12 +60,12 @@ void libSCG::execute(string command)
 	if (cmdAttributes[0] == "rect")
 	{
 		try {
-			rectangle(cmdAttributes[1],
-				cmdAttributes[2] == "true",
-				stoi(cmdAttributes[3]), 
+			rectangle(symbol,
+				cmdAttributes[1] == "true",
+				stoi(cmdAttributes[2]), 
+				stoi(cmdAttributes[3]),
 				stoi(cmdAttributes[4]),
-				stoi(cmdAttributes[5]),
-				stoi(cmdAttributes[6]));
+				stoi(cmdAttributes[5]));
 		} catch (...) {
 			printLogMsg("Command '" + cmdCopy + "' got not correct data!", 2);
 			return ;
@@ -101,12 +101,12 @@ void libSCG::execute(string command)
 	else if (cmdAttributes[0] == "dot")
 	{
 		try {
-			rectangle(cmdAttributes[1],
+			rectangle(symbol,
 				true,
-				stoi(cmdAttributes[2]), 
-				stoi(cmdAttributes[3]),
+				stoi(cmdAttributes[1]), 
 				stoi(cmdAttributes[2]),
-				stoi(cmdAttributes[3]));
+				stoi(cmdAttributes[1]),
+				stoi(cmdAttributes[2]));
 		} catch (...) {
 			printLogMsg("Command '" + cmdCopy + "' got not correct data!", 2);
 			return ;
@@ -116,11 +116,11 @@ void libSCG::execute(string command)
 	else if (cmdAttributes[0] == "circle")
 	{
 		try {
-			circle(cmdAttributes[1],
-				stoi(cmdAttributes[2]), 
+			circle(symbol,
+				stoi(cmdAttributes[1]), 
+				stoi(cmdAttributes[2]),
 				stoi(cmdAttributes[3]),
-				stoi(cmdAttributes[4]),
-				cmdAttributes[5] == "true");
+				cmdAttributes[4] == "true");
 		} catch (...) {
 			printLogMsg("Command '" + cmdCopy + "' got not correct data!", 2);
 			return ;
@@ -130,11 +130,11 @@ void libSCG::execute(string command)
 	else if (cmdAttributes[0] == "line")
 	{
 		try {
-			line(cmdAttributes[1],
-				stoi(cmdAttributes[2]), 
+			line(symbol,
+				stoi(cmdAttributes[1]), 
+				stoi(cmdAttributes[2]),
 				stoi(cmdAttributes[3]),
-				stoi(cmdAttributes[4]),
-				stoi(cmdAttributes[5]));
+				stoi(cmdAttributes[4]));
 		} catch (...) {
 			printLogMsg("Command '" + cmdCopy + "' got not correct data!", 2);
 			return ;
@@ -149,10 +149,10 @@ void libSCG::execute(string command)
 	// TEXT //
 	else if (cmdAttributes[0] == "text")
 	{
-		text(cmdAttributes[1],
+		text(symbol,
+				stoi(cmdAttributes[1]),
 				stoi(cmdAttributes[2]),
-				stoi(cmdAttributes[3]),
-				stoi(cmdAttributes[4]));
+				stoi(cmdAttributes[3]));
 	}
 }
 

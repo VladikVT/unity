@@ -18,7 +18,7 @@ class libSCG
 		// FUNCTIONS //
 		libSCG(int sX, int sY, bool debug, bool btflWindow);
 		~libSCG();
-		void execute(string command);
+		void execute(string command, string symbol = "");
 	protected:
 		// VARIABLES //
 		bool btflWindow = true;
