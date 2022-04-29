@@ -20,6 +20,7 @@ Experience
 - Scrolling: 'j' - down, 'k' - up
 - Enter in directory or show file content: enter
 - Toggle hide and show hiden files: 's'
+- Show file metadata: 'v'
 - Quit: 'q'
 
 ### Todo:
@@ -30,5 +31,5 @@ Experience
 - [ ] View images
 - [x] Hide hiden files
 - [ ] Make custom themes
-- [ ] Show file metadata
+- [x] Show file metadata
 - [ ] Create and delete files
