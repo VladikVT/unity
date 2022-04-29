@@ -1,6 +1,6 @@
 /*
  * ToDo list:
- * [x] View file content
+ * [x] View file metadata
  */
 
 #include <iostream>
@@ -19,17 +19,21 @@ int main(int argc, char **argv)
 {
 	int sizeX;
 	int sizeY;
+	int sizeYcopy;
 	setvbuf(stdout, NULL, _IONBF, 0);
 	fputs("\x1B[255;255H\x1B[6n", stdout);
 	scanf("\x1B[%d;%dR", &sizeY, &sizeX);
-
 	sizeX = sizeX / 2 - 2;
 	sizeY = sizeY - 3;
+	sizeYcopy = sizeY;
+
 	libSCG scg(sizeX, sizeY, false, true);
+	sizeY -= 3;
 	scg.execute("bgcolor;0;0;0");
-	scg.execute("rect;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY - 1), "  ");
+	scg.execute("rect;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY + 1), "  ");
 	scg.execute("line;" + to_string((int)(sizeX * 0.15) + 2) + ";0;" + to_string((int)(sizeX * 0.15) + 2) + ";" + to_string(sizeY), "| ");
 	scg.execute("line;" + to_string(sizeX / 3 + 2) + ";0;" + to_string(sizeX / 3 + 2) + ";" + to_string(sizeY), "| ");
+	scg.execute("line;0;" + to_string(sizeY + 1) + ";" + to_string(sizeX) + ";" + to_string(sizeY + 1), "==");
 	list <string> contentDir;
 	string currentPath = string(current_path()) + "/";
 
@@ -52,8 +56,8 @@ int main(int argc, char **argv)
 				{
 					moveCursorRow(&cursorRow, 1);
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
-					// Clear 1 and 2 column
-					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
+					// Clear 2 and 3 column
+					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY), "  ");
 					if (col3flag)
 					{
 						scg.execute("rect;true;" + to_string(sizeX * 0.35 + 1) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
@@ -71,6 +75,7 @@ int main(int argc, char **argv)
 						print2Col(path, &scg, hidenFiles, cursorRow, sizeX, sizeY);
 					}
 				}
+				printMetadata(&scg, *next(contentDir.begin(), cursorRow), sizeX, sizeY);
 				break;
 			case 107: // Cursor up
 				if (cursorRow > 0)
@@ -79,7 +84,7 @@ int main(int argc, char **argv)
 
 					print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 					// Clear 2 and 3 column
-					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
+					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY), "  ");
 					if (col3flag)
 					{
 						scg.execute("rect;true;" + to_string((int)(sizeX * 0.35 + 1)) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
@@ -100,8 +105,9 @@ int main(int argc, char **argv)
 						print2Col(path, &scg, hidenFiles, cursorRow, sizeX, sizeY);
 					}
 				}
+				printMetadata(&scg, *next(contentDir.begin(), cursorRow), sizeX, sizeY);
 				break;
-			case 115:
+			case 115: // Toggle show and hide hide files
 				hidenFiles = !hidenFiles;
 				updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
 				if (cursorRow >= contentDir.size())

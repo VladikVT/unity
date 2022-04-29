@@ -1,5 +1,17 @@
 #include "unity.h"
 
+void printMetadata(libSCG *scg, string path, int sizeX, int sizeY)
+{
+	scg->execute("rect;true;0;" + to_string(sizeY + 2) + ";" + to_string(sizeX * 2) + ";" + to_string(sizeY + 2), "  ");
+
+	struct stat buf;
+	stat(path.c_str(), &buf);
+
+	string metadata ="Access: " + to_string(buf.st_mode) + " | Size: " + byteConverter(buf.st_size) + " | Last change: " + ctime(&buf.st_mtim.tv_sec);
+
+	scg->execute("text;" + to_string(sizeX * 2) + ";0;" + to_string(sizeY + 2), metadata);
+}
+
 void printFileContent(libSCG *scg, string path, int sizeX, int sizeY)
 {
 	string line;
@@ -95,7 +107,7 @@ void updateDir(list<string> *contentDir, libSCG *scg, string path, bool hidenFil
 		contentDir->clear();
 		// Clear 1 and 2 column
 		scg->execute("rect;true;0;0;" + to_string((int)(sizeX * 0.15 + 1)) + ";" + to_string(sizeY), "  ");
-		scg->execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY - 1), "  ");
+		scg->execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY), "  ");
 		// Add path to top dir
 		contentDir->push_front("/..");
 		// Add paths to internal dirs
@@ -129,4 +141,19 @@ int getch()
 	ch = getchar();
 	tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
 	return ch;
+}
+
+string byteConverter(int byte)
+{
+	string sizeOut = to_string(byte) + " Byte";
+	if (byte >= 1024)
+	{
+		sizeOut = to_string(byte / 1024.0) + " Kb";
+	} else if (byte >= 1048576) {
+		sizeOut = to_string(byte / 1048576.0) + " Mb";
+	} else if (byte >= 1048576 * 1024) {
+		sizeOut = to_string(byte / 1048576.0 / 1024.0) + " Gb";
+	}
+
+	return sizeOut;
 }
