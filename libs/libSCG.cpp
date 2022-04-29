@@ -27,6 +27,7 @@ libSCG::libSCG(int sX, int sY, bool debug, bool btflWindow)
 libSCG::~libSCG()
 {
 	printLogMsg("Stop SCG", 0);
+	clearScreen;
 }
 
 // PUBLIC //
