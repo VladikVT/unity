@@ -20,7 +20,6 @@ Experience
 - Scrolling: 'j' - down, 'k' - up
 - Enter in directory or show file content: enter
 - Toggle hide and show hiden files: 's'
-- Show file metadata: 'v'
 - Quit: 'q'
 
 ### Todo:
