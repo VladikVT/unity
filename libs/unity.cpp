@@ -27,7 +27,7 @@ void printFileContent(libSCG *scg, string path, int sizeX, int sizeY)
 		return ;
 	}
 
-	while (getline(file, line) && counter < sizeY)
+	while (getline(file, line) && counter < sizeY + 1)
 	{
 		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), line);
 		counter++;
