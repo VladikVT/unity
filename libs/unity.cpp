@@ -16,6 +16,13 @@ void makeCommand(string command, string path)
 		file.close();
 	} else if (command == "nd") {
 		create_directory(path + "/" + arg);
+	} else if (command == "rm") {
+		if (is_directory((path + "/" + arg).c_str()))
+		{
+			remove_all((path + "/" + arg).c_str());
+		} else {
+			unlink((path + "/" + arg).c_str());
+		}
 	}
 }
 

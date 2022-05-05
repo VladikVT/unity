@@ -26,6 +26,7 @@ Experience
 ### Commands:
 - New file: nf [file name]
 - New directory: nd [directory]
+- Remove file or direcory: rm [file or directory]
 
 ### Todo:
 - [x] Moving in dirs
