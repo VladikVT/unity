@@ -37,4 +37,4 @@ Experience
 - [x] Hide hiden files
 - [ ] Make custom themes
 - [x] Show file metadata
-- [ ] Create and delete files
+- [x] Create and delete files
