@@ -1,6 +1,8 @@
 /*
  * ToDo list:
- * [x] View file metadata
+ * [x] Make command line
+ * [ ] Make create file command
+ * [ ] Make delete file command
  */
 
 #include <iostream>
@@ -24,16 +26,16 @@ int main(int argc, char **argv)
 	fputs("\x1B[255;255H\x1B[6n", stdout);
 	scanf("\x1B[%d;%dR", &sizeY, &sizeX);
 	sizeX = sizeX / 2 - 2;
-	sizeY = sizeY - 3;
+	sizeY = sizeY - 4;
 	sizeYcopy = sizeY;
 
 	libSCG scg(sizeX, sizeY, false, true);
 	sizeY -= 3;
 	scg.execute("bgcolor;0;0;0");
-	scg.execute("rect;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY + 1), "  ");
-	scg.execute("line;" + to_string((int)(sizeX * 0.15) + 2) + ";0;" + to_string((int)(sizeX * 0.15) + 2) + ";" + to_string(sizeY), "| ");
-	scg.execute("line;" + to_string(sizeX / 3 + 2) + ";0;" + to_string(sizeX / 3 + 2) + ";" + to_string(sizeY), "| ");
-	scg.execute("line;0;" + to_string(sizeY + 1) + ";" + to_string(sizeX) + ";" + to_string(sizeY + 1), "==");
+	scg.execute("rect;true;0;0;" + to_string(sizeX - 1) + ";" + to_string(sizeY + 2), "  ");
+	scg.execute("line;" + to_string((int)(sizeX * 0.15) + 2) + ";0;" + to_string((int)(sizeX * 0.15) + 2) + ";" + to_string(sizeY),  "│ ");
+	scg.execute("line;" + to_string(sizeX / 3 + 2) + ";0;" + to_string(sizeX / 3 + 2) + ";" + to_string(sizeY), "│ ");
+	scg.execute("line;0;" + to_string(sizeY + 1) + ";" + to_string(sizeX) + ";" + to_string(sizeY + 1), "──");
 	list <string> contentDir;
 	string currentPath = string(current_path()) + "/";
 
@@ -44,6 +46,7 @@ int main(int argc, char **argv)
 	updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
 	print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 	
+	bool commandMode = false;
 	bool quit = false;
 
 	while (!quit)
@@ -145,11 +148,25 @@ int main(int argc, char **argv)
 					printFileContent(&scg, path, sizeX, sizeY);
 				}
 				break;
+			case 58:
+				commandMode = true;
+				break;
 			case 113: // Quit
 				quit = true;
 				break;
 			default:
 				break;
+		}
+
+		if (commandMode)
+		{
+			string command;
+			cout << ":";
+			cin >> command;
+			getch();
+			cout << "\033[A\33[2K\r";
+			commandMode = false;
+			continue;
 		}
 	}
 
