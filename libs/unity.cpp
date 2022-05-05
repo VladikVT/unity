@@ -46,16 +46,16 @@ void printFileContent(libSCG *scg, string path, int sizeX, int sizeY)
 	
 	if (!file.is_open())
 	{
-		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), "[CAN`T OPEN FILE]");
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX / 3 + 3)) + ";" + to_string(counter), "[CAN`T OPEN FILE]");
 		return ;
 	} else if (!access(path.c_str(), X_OK)) {
-		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), "[EXECUTABLE FILE]");
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX / 3 + 3)) + ";" + to_string(counter), "[EXECUTABLE FILE]");
 		return ;
 	}
 
 	while (getline(file, line) && counter < sizeY + 1)
 	{
-		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX * 0.35 + 1)) + ";" + to_string(counter), line);
+		scg->execute("text;" + to_string((int)(sizeX)) + ";" + to_string((int)(sizeX / 3 + 3)) + ";" + to_string(counter), line);
 		counter++;
 	}
 }

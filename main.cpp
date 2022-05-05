@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY), "  ");
 					if (col3flag)
 					{
-						scg.execute("rect;true;" + to_string(sizeX * 0.35 + 1) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+						scg.execute("rect;true;" + to_string(sizeX / 3 + 3) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
 						col3flag = false;
 					}
 					// Print internal folder
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 					scg.execute("rect;true;" + to_string((int)(sizeX * 0.15) + 3) + ";0;" + to_string(sizeX / 3 + 1) + ";" + to_string(sizeY), "  ");
 					if (col3flag)
 					{
-						scg.execute("rect;true;" + to_string((int)(sizeX * 0.35 + 1)) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+						scg.execute("rect;true;" + to_string((int)(sizeX / 3 + 3)) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
 						col3flag = false;
 					}
 					// Print internal folder
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 				print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 				if (col3flag)
 				{
-					scg.execute("rect;true;" + to_string(sizeX * 0.35 + 1) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
+					scg.execute("rect;true;" + to_string(sizeX / 3 + 3) + ";0;" + to_string(sizeX) + ";" + to_string(sizeY), "  ");
 					col3flag = false;
 				}
 				break;
