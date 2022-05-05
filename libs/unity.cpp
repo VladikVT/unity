@@ -1,5 +1,24 @@
 #include "unity.h"
 
+void makeCommand(string command, string path)
+{
+	string commandCopy = command;
+	string arg;
+	
+	if (commandCopy.find(" ") != string::npos)
+	{
+		arg = commandCopy.erase(0, commandCopy.find_first_of(" ") + 1);
+		command.erase(command.find_first_of(" "), command.length());
+	}
+	if (command == "nf")
+	{
+		ofstream file (path + "/" + arg);
+		file.close();
+	} else if (command == "nd") {
+		create_directory(path + "/" + arg);
+	}
+}
+
 void printMetadata(libSCG *scg, string path, int sizeX, int sizeY)
 {
 	scg->execute("rect;true;0;" + to_string(sizeY + 2) + ";" + to_string(sizeX * 2) + ";" + to_string(sizeY + 2), "  ");

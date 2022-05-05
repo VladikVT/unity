@@ -24,6 +24,7 @@ void moveCursorRow(int *cursorRow, int direction);
 void print2Col(string path, libSCG *scg, bool hidenFiles, int cursorRow, int sizeX, int sizeY);
 void printFileContent(libSCG *scg, string path, int sizeX, int sizeY);
 void printMetadata(libSCG *scg, string path, int sizeX, int sizeY);
+void makeCommand(string command, string path);
 string byteConverter(int byte);
 
 #endif // UNITY_H

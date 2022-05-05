@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 					printFileContent(&scg, path, sizeX, sizeY);
 				}
 				break;
-			case 58:
+			case 58: // Command mode
 				commandMode = true;
 				break;
 			case 113: // Quit
@@ -157,15 +157,19 @@ int main(int argc, char **argv)
 			default:
 				break;
 		}
+		
+		cout << "\33[2K\r";
 
 		if (commandMode)
 		{
 			string command;
 			cout << ":";
-			cin >> command;
-			getch();
+			getline(cin, command);
 			cout << "\033[A\33[2K\r";
 			commandMode = false;
+			makeCommand(command, currentPath);
+			updateDir(&contentDir, &scg, currentPath, hidenFiles, sizeX, sizeY);
+			print1Col(&contentDir, &scg, cursorRow, sizeX, sizeY);
 			continue;
 		}
 	}

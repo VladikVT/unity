@@ -23,6 +23,10 @@ Experience
 - Command mode: ':'
 - Quit: 'q'
 
+### Commands:
+- New file: nf [file name]
+- New directory: nd [directory]
+
 ### Todo:
 - [x] Moving in dirs
 - [x] Scrolling folder content
