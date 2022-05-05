@@ -1,20 +1,23 @@
 .PHONY: all clean install uninstall
 
+PREFIX=/usr/local
+CXX=g++
+CXXFLAGS=
+
 all: unity
 
 clean:
 	rm -rf unity *.o
 main.o: main.cpp
-	g++ -c main.cpp
+	$(CXX) -c main.cpp
 libSCG.o: libs/libSCG.cpp
-	g++ -c libs/libSCG.cpp
+	$(CXX) -c libs/libSCG.cpp
 unity.o: libs/unity.cpp
-	g++ -c libs/unity.cpp
+	$(CXX) -c libs/unity.cpp
 unity: main.o libSCG.o unity.o
-	g++ main.o libSCG.o unity.o -o unity
-install:
-	install ./unity /usr/local/bin
+	$(CXX) main.o libSCG.o unity.o -o unity
+install: all
+	mkdir -p $(PREFIX)/bin
+	install unity $(PREFIX)/bin
 uninstall:
-	rm -rf /usr/local/bin/unity
-
-
+	rm -rf $(PREFIX)/bin/unity
