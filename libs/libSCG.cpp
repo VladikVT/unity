@@ -167,11 +167,21 @@ void libSCG::drawWindow()
 		{
 			for (int x = 0; x < sizeX + 2; x++)
 			{
-				if (y == 0 || y == sizeY + 1)
+				if (y == 0 && x == 0) 
 				{
-					cout << "==";
-				} else if (x == 0 || x == sizeX + 1) {
-					cout << "||";
+					cout << "┌─";
+				} else if (y == 0 && x == sizeX + 1) {
+					cout << "─┐";
+				} else if (y == sizeY + 1 && x == 0) {
+					cout << "└─";
+				} else if (y == sizeY + 1 && x == sizeX + 1) {
+					cout << "─┘";
+				} else if (y == 0 || y == sizeY + 1) {
+					cout << "──";
+				} else if (x == 0) {
+					cout << "│ ";
+				} else if (x == sizeX + 1) {
+					cout << " │";
 				} else {
 					cout << "  ";
 				}
