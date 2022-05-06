@@ -1,8 +1,6 @@
 /*
  * ToDo list:
- * [x] Make command line
- * [x] Make create file command
- * [x] Make delete file command
+ * [x] Make file sorting 
  */
 
 #include <iostream>

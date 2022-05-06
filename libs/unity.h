@@ -26,5 +26,6 @@ void printFileContent(libSCG *scg, string path, int sizeX, int sizeY);
 void printMetadata(libSCG *scg, string path, int sizeX, int sizeY);
 void makeCommand(string command, string path);
 string byteConverter(int byte);
+bool compare_nocase (const string& first, const string& second);
 
 #endif // UNITY_H

@@ -101,22 +101,30 @@ void print1Col(list<string> *contentDir, libSCG *scg, int cursorRow, int sizeX, 
 void print2Col(string path, libSCG *scg, bool hidenFiles, int cursorRow, int sizeX, int sizeY)
 {
 	int counter = 0;
+	list<string> contentPath;
 	if (access(path.c_str(), R_OK) == 0)
 	{
 		for (auto& entry : filesystem::directory_iterator(path))
 		{
 			if (counter > sizeY) break;
 			string file = string(entry.path());
-			string fileCopy = file;
 			file.erase(0, file.find_last_of("/"));
 			if (file.find_first_of(".") == 1 && !hidenFiles)
 			{
 				continue;
 			}
 			if (file.find_first_of(".") == 0 && !hidenFiles) continue;
-			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;0"); }
+			contentPath.push_front(string(entry.path()));
+			counter++;
+		}
+		counter = 0;
+		contentPath.sort(compare_nocase);
+		for (auto i = contentPath.begin(); i != contentPath.end(); ++i){
+			string file = *i;
+			file.erase(0, file.find_last_of("/"));	
+			if (is_directory(*i)) { scg->execute("fgcolor;255;255;0"); }
 			scg->execute("text;" + to_string((int)(sizeX * 0.35) - 1) + ";" + to_string((int)(sizeX * 0.15) + 3)  + ";" + to_string(counter), file);	
-			if (is_directory(fileCopy)) { scg->execute("fgcolor;255;255;255"); }
+			if (is_directory(*i)) { scg->execute("fgcolor;255;255;255"); }
 			counter++;
 		}
 	} else {
@@ -148,6 +156,7 @@ void updateDir(list<string> *contentDir, libSCG *scg, string path, bool hidenFil
 			contentDir->push_back(string(entry.path()));
 		}
 	}
+	contentDir->sort(compare_nocase);
 }
 
 void moveCursorRow(int *cursorRow, int direction)
@@ -182,4 +191,16 @@ string byteConverter(int byte)
 	}
 
 	return sizeOut;
+}
+
+bool compare_nocase (const std::string& first, const std::string& second)
+{
+  unsigned int i=0;
+  while ( (i<first.length()) && (i<second.length()) )
+  {
+    if (tolower(first[i])<tolower(second[i])) return true;
+    else if (tolower(first[i])>tolower(second[i])) return false;
+    ++i;
+  }
+  return ( first.length() < second.length() );
 }
