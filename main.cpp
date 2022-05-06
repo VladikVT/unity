@@ -1,8 +1,8 @@
 /*
  * ToDo list:
  * [x] Make command line
- * [ ] Make create file command
- * [ ] Make delete file command
+ * [x] Make create file command
+ * [x] Make delete file command
  */
 
 #include <iostream>
@@ -21,13 +21,11 @@ int main(int argc, char **argv)
 {
 	int sizeX;
 	int sizeY;
-	int sizeYcopy;
 	setvbuf(stdout, NULL, _IONBF, 0);
 	fputs("\x1B[255;255H\x1B[6n", stdout);
 	scanf("\x1B[%d;%dR", &sizeY, &sizeX);
 	sizeX = sizeX / 2 - 2;
 	sizeY = sizeY - 4;
-	sizeYcopy = sizeY;
 
 	libSCG scg(sizeX, sizeY, false, true);
 	sizeY -= 3;
